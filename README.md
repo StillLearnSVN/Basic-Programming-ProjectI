@@ -1,2 +1,2 @@
-# ProjectI_Daspro2022
+# ProjectI2022
 Cryptography Program in C
