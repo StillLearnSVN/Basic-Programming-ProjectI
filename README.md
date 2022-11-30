@@ -23,46 +23,57 @@ int** encrypt(char *str, int key)
     for (int i = 0; i < strlen(str); i++)
     {
         int ascii = (int)str[i];
+        printf("%d ", ascii);
         chipper[0][i] = getChipper(ascii, key); // chipper
         chipper[1][i] = getKey(ascii, key); // chipkey
     }
+    printf("\n");
 
     return chipper;
 }
 
-char *decrypt(int *chipper, int *chipkey, int key, int size)
+int *decrypt(int *chipper, int *chipkey, int key, int size)
 {
-    char *str = (char*)malloc(sizeof(char) * size);
+    int *arr = (int*)malloc(sizeof(int) * size);
+    // set default to null
+    memset(arr, 0, sizeof(int) * size);
     for (int i = 0; i < size; i++)
     {
-        str[i] = (char)(chipper[i] * key) + chipkey[i];;
+        arr[i] = (chipper[i] * key + chipkey[i]);
     }
 
-    return str;
+    printf("\n");
+    return arr;
 }
 
 int main(){
     char str[100];
-    int key;
+    int key, len;
     printf("Enter the plain string: ");
-    scanf(" %[^\n]%*c", &str);
+    scanf("%99s%n", &str, &len);
     printf("Enter the key: ");
     scanf("%d", &key);
     int** chipper = encrypt(str, key);
 
     printf("Chipper: \n");
-    for (int i = 0; i < strlen(str); i++)
+    for (int i = 0; i < len; i++)
     {
         printf("%d ", chipper[0][i]);
     }
     printf("\nkey: \n");
-     for (int i = 0; i < strlen(str); i++)
+     for (int i = 0; i < len; i++)
     {
         printf("%d ", chipper[1][i]);
     }
 
-    char* decrypted = decrypt(chipper[0], chipper[1], key, strlen(str));
-    printf("\nDecrypted: %s", decrypted);
+    int* decrypted = decrypt(chipper[0], chipper[1], key, len);
+    free(chipper);
+    printf("Decrypted: ");
+    for (int i = 0; i < len; i++)
+    {
+        printf("%c", (char)decrypted[i]);
+    }
+    printf("\n");
 
     return 0;
 }
